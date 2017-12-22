@@ -1,18 +1,42 @@
 ﻿using System;
 using Akka.Actor;
+using MovieStreaming.Messages;
 
 namespace MovieStreaming.Actors
 {
-    public class PlaybackActor: UntypedActor
+    public class PlaybackActor : ReceiveActor
     {
         public PlaybackActor()
         {
             Console.WriteLine("Creating a PlaybackActor");
+            Receive<PlayMovieMessage>(message => HandlePlayMovieMessage(message));
         }
 
-        protected override void OnReceive(object message)
+        private void HandlePlayMovieMessage(PlayMovieMessage message)
         {
-            throw new System.NotImplementedException();
+            ColorConsole.WriteLineYellow(String.Format($"PlayMovieMessage {message.MovieTitle} for user {message.UserId}"));
+        }
+
+        protected override void PreStart()
+        {
+            ColorConsole.WriteLineGreen("PlaybackActor PreStart");
+        }
+
+        protected override void PostStop()
+        {
+            ColorConsole.WriteLineGreen("PlaybackActor PostStop");
+        }
+
+        protected override void PreRestart(Exception reason, object message)
+        {
+            ColorConsole.WriteLineGreen("PreRestart, reason: "+reason);
+            base.PreRestart(reason, message);
+        }
+
+        protected override void PostRestart(Exception reason)
+        {
+            ColorConsole.WriteLineGreen("PostRestart, reason: "+ reason);
+            base.PostRestart(reason);
         }
     }
 }
