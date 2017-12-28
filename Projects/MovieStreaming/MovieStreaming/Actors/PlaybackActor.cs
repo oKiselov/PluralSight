@@ -8,8 +8,10 @@ namespace MovieStreaming.Actors
     {
         public PlaybackActor()
         {
-            Console.WriteLine("Creating a PlaybackActor");
-            Receive<PlayMovieMessage>(message => HandlePlayMovieMessage(message));
+            Context.ActorOf(Props.Create<UserCoordinatorActor>(), "UserCoordinator");
+            Context.ActorOf(Props.Create<PlaybackStatisticsActor>(), "PlaybackStatistics");
+            //Console.WriteLine("Creating a PlaybackActor");
+            //Receive<PlayMovieMessage>(message => HandlePlayMovieMessage(message));
         }
 
         private void HandlePlayMovieMessage(PlayMovieMessage message)
